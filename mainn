@@ -1,0 +1,28 @@
+class WordsFinder:
+    def __init__(self, *names_file):
+        self.names_file = names_file
+
+    def get_all_words(self):
+        all_words = {}
+        for name_file in self.names_file:
+            with open(name_file, encoding='utf-8') as file:
+                line = file.read().lower()
+                for punctuation in [',', '.', '=', '!', '?', ';', ':', ' - ']:
+                    line.replace(punctuation, ' ')
+                words = line.split()
+                all_words[name_file] = words
+        return all_words
+
+    def find(self, word):
+        places = {}
+        for name, words in self.get_all_words().items():
+            if word.lower() in words:
+                places[name] = words.index(word.lower()) + 1
+        return places
+
+    def count(self, word):
+        places = {}
+        for name, words in self.get_all_words().items():
+            if word.lower() in words:
+                places[name] = words.count(word.lower())
+        return places
